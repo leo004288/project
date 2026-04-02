@@ -1,6 +1,7 @@
 package ex03;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,7 @@ class MovVo {
 	private String name;
 	private String mCode;
 	private int    people;
-	private int    basic;
+	private double basic;
 	private String tCode;
 	
 	private String mName;
@@ -29,7 +30,7 @@ class MovVo {
 
 //	constructor
 	public MovVo(String num, String name, String mCode, 
-			int people, int basic, String tCode) {
+			int people, double basic, String tCode) {
 		this.num = num;
 		this.name = name;
 		this.mCode = mCode;
@@ -71,11 +72,11 @@ class MovVo {
 		this.people = people;
 	}
 
-	public int getBasic() {
+	public double getBasic() {
 		return basic;
 	}
 
-	public void setBasic(int basic) {
+	public void setBasic(double basic) {
 		this.basic = basic;
 	}
 
@@ -156,7 +157,7 @@ class Movie implements Ipo {
 			String name   = li[1].trim();
 			String mCode  = li[2].trim();
 			int    people = Integer.parseInt(li[3].trim());
-			int    basic  = Integer.parseInt(li[4].trim());
+			double basic  = Double.parseDouble(li[4].trim());
 			String tCode  = li[5].trim();
 			
 			MovVo movvo = new MovVo(num, name, mCode, people, basic, tCode);
@@ -172,19 +173,59 @@ class Movie implements Ipo {
 			
 			double money = Vo.getBasic() * Vo.getPeople();
 			Vo.setMoney(money);
+
+			double scp    = 0.0;
+			String tName = ""; 
 			
-			Map<String, String> mName = new HashMap<>();
+			if ( Vo.gettCode().equals("M") ) {
+				scp = 0.0; tName = "조조";
+			} else {
+				if (Vo.gettCode().equals("D")) {
+					scp = 0.05; tName = "일반";
+				} else {
+					if (Vo.gettCode().equals("N")) {
+						scp = 0.1;  tName = "심야";
+					}
+				}
+			}
+			double sc = Vo.getMoney() * scp;
+			Vo.setSc(sc);	
+			Vo.settName(tName);				
+					
+			double bill = ( Vo.getBasic() * Vo.getPeople() ) + Vo.getSc();
+			Vo.setBill(bill);
 			
+			Map<String, String> map = new HashMap<>();
+			map.put("A1", "액션대작");
+			map.put("R1", "로맨스극장");
+			map.put("C1", "코미디쇼");
+			map.put("H1", "공포특집");
+			String mCode = Vo.getmCode();
+			String mName = map.get(mCode); 
+			Vo.setmName(mName);
 			
 		}
+		
 		
 	}
 
 	@Override
 	public void output() {
-		// TODO Auto-generated method stub
+		String title = "예매번호 이름  영화명   총요금   할증액  최종결제금액  시간대명";
+		String fmt   = "%s   %s %s  %.2f  %.2f  %.2f    %s\n";
+		System.out.println(title);
+		Collections.sort(list, (a, b) -> Double.compare(b.getBill(), a.getBill()));
+		
+		
+		for (int i = 0; i < list.size(); i++) {
+			MovVo Vo = list.get(i);
+			
+			System.out.printf(fmt,
+					Vo.getNum(),Vo.getName(),Vo.getmName(),Vo.getMoney(),Vo.getSc(),Vo.getBill(),Vo.gettName());
+		}
 		
 	}
+	
 	
 }
 
