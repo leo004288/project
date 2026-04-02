@@ -1,7 +1,9 @@
 package ex03;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 interface Ipo {
@@ -165,6 +167,16 @@ class Movie implements Ipo {
 	@Override
 	public void process() {
 		
+		for (int i = 0; i < list.size(); i++) {
+			MovVo Vo = list.get(i);
+			
+			double money = Vo.getBasic() * Vo.getPeople();
+			Vo.setMoney(money);
+			
+			Map<String, String> mName = new HashMap<>();
+			
+			
+		}
 		
 	}
 
